@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogTitle, Grid, Typography, IconButton, DialogContent } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import './App.css';
@@ -7,18 +7,54 @@ import CustomDialog from "./components/CustomDialog";
 // import List from './components/List';
 
 const status = ["Not Started", "In Progress", "Completed"]
-function App() {
 
+const mockTaskList = [
+  {
+    taskName: "Task1",
+    description: "Description1",
+    status: "Not Started",
+    priority: "Low",
+    storyPoints: "1"
+  },
+  {
+    taskName: "Task2",
+    description: "Description2",
+    status: "In Progress",
+    priority: "Medium",
+    storyPoints: "2"
+  },
+  {
+    taskName: "Task3",
+    description: "Description3",
+    status: "Completed",
+    priority: "High",
+    storyPoints: "3"
+  }
+]
+
+function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [taskList, setTaskList] = useState([]);
 
   const handleCreateTaskDialog = () => {
     console.log("Inside handleCreateTaskDialog");
     setDialogOpen(true);
   }
 
-  // const handleClose = () => {
-  //   setDialogOpen(false);
-  // }
+  const handleClose = () => {
+    console.log("Inside handleClose")
+    setDialogOpen(false);
+  }
+
+  const handleMockSetup = () => {
+    setTaskList(mockTaskList);
+  }
+
+  useEffect = () => {
+    console.log("Inside the useEffect")
+    handleMockSetup();
+    // Fetch API call to get the list of tasks
+  }
 
   return (
     <div style={{ margin: "2%" }}>
@@ -56,9 +92,12 @@ function App() {
           </Grid>
           <Grid container direction="row" spacing={4}>
           {
-            status?.map(() => {
+            status?.map((eachStatus) => {
               return <Grid item xs={3}>
-                  <List />
+                  <List
+                    statusType={eachStatus}
+                    taskData={taskList}
+                  />
                 </Grid>
             })
           }
@@ -69,6 +108,7 @@ function App() {
         dialogOpen === true ?
           <CustomDialog
             open={dialogOpen}
+            handleCloseDialog={handleClose}
           />
           :
           ""
